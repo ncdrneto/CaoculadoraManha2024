@@ -11,34 +11,42 @@ struct ContentView: View {
     @State var years: Int?
     @State var months: Int?
     @State var result: Int?
-    @State var porteSelecionado = "Pequeno"
-    let portes = ["Pequeno", "Médio", "Grande"]
+    
+    @State var porteSelected = Porte.pequeno
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text("Qual a idade do seu cão?")
+                .font(.header5)
             
             Text("Anos")
+                .font(.body1)
             TextField("Quantos anos completos tem seu cão", value: $years, format: .number)
                 .textFieldStyle(.roundedBorder)
                 .keyboardType(.numberPad)
             
             Text("Meses")
+                .font(.body1)
             TextField("E quantos meses além disso ele tem", value: $months, format: .number)
                 .textFieldStyle(.roundedBorder)
                 .keyboardType(.numberPad)
             
             Text("Porte")
+                .font(.body1)
             
-            Picker(selection: $porteSelecionado, label: Text("Portes")) {
-                ForEach(portes, id: \.self) { porte in 
-                    Text(porte)
+            Picker(selection: $porteSelected, label: Text("Portes")) {
+                ForEach(Porte.allCases, id: \.self) { porte in
+                    Text(porte.rawValue)
                 }
             }
             .pickerStyle(.segmented)
             
             if let result {
                 Text("Seu cachorro tem, em idade humana...")
+                    .font(.body1)
+                    
                 Text("\(result) anos")
+                    .font(.display)
             } else {
                 Image(ImageResource.clarinha)
                     .resizable()
@@ -74,15 +82,14 @@ struct ContentView: View {
         
         let multiplicador: Int
         
-        switch porteSelecionado {
-        case "Pequeno":
+        switch porteSelected {
+        case .pequeno:
             multiplicador = 6
-        case "Médio":
+        case .medio:
             multiplicador = 7
-        case "Grande":
+        case .grande:
             multiplicador = 8
-        default:
-            multiplicador = 0
+        
         }
         
         result = years * multiplicador + months * multiplicador / 12
