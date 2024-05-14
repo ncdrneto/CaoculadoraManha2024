@@ -80,21 +80,8 @@ struct ContentView: View {
             return
         }
         
-        let multiplicador: Int
-        
-        switch porteSelected {
-        case .pequeno:
-            multiplicador = 6
-        case .medio:
-            multiplicador = 7
-        case .grande:
-            multiplicador = 8
-        
-        }
-        
-        result = years * multiplicador + months * multiplicador / 12
+        result = porteSelected.calcularIdade(deAnos: years, eMeses: months)
   
-        
     }
 
 }
