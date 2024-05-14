@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+//MARK: - View
+
 struct ContentView: View {
     @State var years: Int?
     @State var months: Int?
@@ -15,58 +17,85 @@ struct ContentView: View {
     @State var porteSelected = Porte.pequeno
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Qual a idade do seu cão?")
-                .font(.header5)
-            
-            Text("Anos")
-                .font(.body1)
-            TextField("Quantos anos completos tem seu cão", value: $years, format: .number)
-                .textFieldStyle(.roundedBorder)
-                .keyboardType(.numberPad)
-            
-            Text("Meses")
-                .font(.body1)
-            TextField("E quantos meses além disso ele tem", value: $months, format: .number)
-                .textFieldStyle(.roundedBorder)
-                .keyboardType(.numberPad)
-            
-            Text("Porte")
-                .font(.body1)
-            
-            Picker(selection: $porteSelected, label: Text("Portes")) {
-                ForEach(Porte.allCases, id: \.self) { porte in
-                    Text(porte.rawValue)
-                }
-            }
-            .pickerStyle(.segmented)
-            
-            if let result {
-                Text("Seu cachorro tem, em idade humana...")
-                    .font(.body1)
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20.0) {
+                    Text("Qual a idade do seu cão?")
+                        .font(.header5)
                     
-                Text("\(result) anos")
-                    .font(.display)
-            } else {
-                Image(ImageResource.clarinha)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxHeight: 150)
-                    .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                    Text("Anos")
+                        .font(.body1)
+                    
+                    TextField("Quantos anos completos tem seu cão", value: $years, format: .number)
+                        .textFieldStyle(.roundedBorder)
+                        .keyboardType(.numberPad)
+                    
+                    Text("Meses")
+                        .font(.body1)
+                    
+                    TextField("E quantos meses além disso ele tem", value: $months, format: .number)
+                        .textFieldStyle(.roundedBorder)
+                        .keyboardType(.numberPad)
+                    
+                    Text("Porte")
+                        .font(.body1)
+                    
+                    Picker(selection: $porteSelected, label: Text("Portes")) {
+                        ForEach(Porte.allCases, id: \.self) { porte in
+                            Text(porte.rawValue)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    
+                    Divider()
+                    
+                    Spacer()
+                    
+                    if let result {
+                        Text("Seu cachorro tem, em idade humana...")
+                            .font(.body1)
+                            
+                        Text("\(result) anos")
+                            .font(.display)
+                    } else {
+                        Image(ImageResource.clarinha)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxHeight: 150)
+                            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                    }
+                    
+                    Spacer()
+                    
+                    Button("Cãocular", action: processYears)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .background(.indigo)
+                    .foregroundStyle(.white)
+                    .clipShape(.rect(cornerRadius: 10))
+                    .bold()
+                }
+                .textFieldStyle(.roundedBorder)
+                .keyboardType(.numberPad)
+                .padding()
+                .containerRelativeFrame(.vertical)
             }
-            
-            Button("Cãocular", action: processYears)
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(.indigo)
-            .foregroundStyle(.white)
-            .clipShape(.rect(cornerRadius: 10))
-            .bold()
+            .navigationTitle("Cãoculadora")
+            .scrollDismissesKeyboard(.immediately)
+            .toolbarBackground(.indigo, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
         }
-        .padding()
-        
+        .fontDesign(.rounded)
     }
     
+
+
+}
+
+//MARK: - Functions
+
+extension ContentView {
     func processYears() {
         print("cãocular")
         
@@ -83,7 +112,6 @@ struct ContentView: View {
         result = porteSelected.calcularIdade(deAnos: years, eMeses: months)
   
     }
-
 }
 
 #Preview {
